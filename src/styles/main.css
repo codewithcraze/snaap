@@ -1,0 +1,278 @@
+@import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+.form input {
+    height: 50px;
+}
+
+.highlight {
+    background-color: rgb(247, 247, 212);
+    border: 2px solid orange;
+    padding: 5px;
+}
+
+
+
+.form input[type="checkbox"] {
+    padding-right: 30px !important;
+    width: 28px !important;
+    margin-right: 10px !important;
+}
+
+.form input:checked {
+    width: 30px;
+}
+
+.form button {
+    height: 50px;
+}
+
+.notification {
+    position: fixed;
+    top: 70px;
+    z-index: 1000;
+    right: 25px;
+    padding: 5px;
+    width: auto;
+    background-color: rgb(7, 133, 3, 1);
+    color: white;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.btnx {
+    position: absolute;
+    top: -8px;
+    right: -5px;
+    border: none;
+    font-weight: 700;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    color: black;
+    font-size: 1rem;
+    height: 20px;
+    width: 20px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1px;
+    border: 1px solid black;
+    border-radius: 100%;
+}
+
+.date {
+    height: 55px;
+    border: 1px solid rgb(85, 84, 84);
+}
+
+.navbar-brand {
+    font-weight: 600;
+}
+
+.header {
+    background-color: rgb(134 181 228) !important;
+}
+
+.link-active {
+    background-color: white !important;
+    color: black !important;
+    border-radius: 5px !important;
+    font-weight: 700 !important;
+}
+
+.adminLayout {
+    margin-top: 0rem !important;
+}
+
+.adminLayout {
+    position: absolute;
+    width: 100%;
+    display: flex !important;
+    /* overflow-x: scroll; */
+    scrollbar-width: none;
+}
+
+.adminLayout nav div ul {
+    display: flex;
+}
+
+.adminLayout main {
+    margin-top: 0rem !important;
+}
+
+.MuiPaper-root {
+    width: 15%;
+}
+
+@media screen and (max-width: 1500px) {
+    .MuiPaper-root {
+        width: 30%;
+        box-shadow: 1px 1px 10px lightgrey;
+    }
+}
+
+
+.MuiPaper-root ul div div span {
+    font-weight: 400;
+    font-family: 'Poppins';
+}
+
+.adminLayout {
+    --bs-gutter-x: 0 !important;
+    height: calc(100vh - 76px);
+    margin-top: 3rem !important;
+}
+
+
+
+@media screen and (max-width: 800px) {
+    .MuiPaper-root {
+        width: 75%;
+        box-shadow: 1px 1px 10px lightgrey;
+    }
+
+    .adminLayout nav {
+        position: absolute;
+        width: 100%;
+        display: flex !important;
+        overflow-x: scroll;
+        scrollbar-width: none;
+    }
+
+    .adminLayout nav div ul {
+        display: flex;
+    }
+
+    .adminLayout main {
+        margin-top: 5rem;
+    }
+
+    .forgetForm div,
+    .forgetForm button {
+        width: 100% !important;
+    }
+
+    .table-styling {
+        display: flex;
+    }
+
+    .table-styling thead tr {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .table-styling thead tr th {
+        border: 1px solid lightgrey !important;
+        height: 55px;
+    }
+
+    .table-styling tbody {
+        display: flex;
+    }
+
+    .table-styling tbody tr {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .table-styling tbody tr td {
+        height: 55px;
+        border: 1px solid lightgrey !important;
+    }
+
+    .notification {
+        width: calc(100% - 60%);
+    }
+
+}
+
+/* main.css */
+.active-link {
+    background-color: #007bff;
+    /* Change this to your preferred active color */
+    color: #ffffff;
+    /* Ensures text is readable against the background */
+}
+
+
+.sidebar {
+    /* background-color: #2f034d !important; */
+    background-color: #21013b !important;
+    height: 53px !important;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+
+.css-jpln7h-MuiTabs-scroller {
+    overflow: auto !important
+}
+
+.css-13xfq8m-MuiTabPanel-root {
+    padding: 5px !important;
+}
+
+.MuiTabs-scroller .MuiTabs-fixed .css-jpln7h-MuiTabs-scroller {
+    overflow: auto !important;
+
+}
+
+.css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
+    color: #1976d2;
+    border: 1px solid #e9e9e9;
+    border-radius: 15px 15px 1px 1px;
+}
+
+.effect div label {
+    cursor: pointer;
+}
+
+
+
+
+.country-selection .active {
+    background-color: #007bff;
+    color: white;
+}
+
+
+
+
+
+
+
+
+
+
+/* Override Toastify default styles */
+.Toastify__toast {
+    /* background-color: #333 !important;
+    color: #fff !important;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); */
+}
+
+.Toastify__toast--success {
+    /* background-color: #4caf50 !important; */
+}
+
+.Toastify__toast--error {
+    /* background-color: #f44336 !important; */
+}
+
+/* Customize progress bar */
+.Toastify__progress-bar {
+    /* background-color: #2196f3 !important; */
+}

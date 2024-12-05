@@ -1,0 +1,5 @@
+.navbar{
+    height: 60px !important;
+    margin-bottom: 2rem;
+    background-image: linear-gradient( 85.2deg,  rgba(33,3,40,1) 7.5%, rgba(65,5,72,1) 88.7% );
+}
