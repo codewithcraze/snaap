@@ -31,8 +31,8 @@ const Header = () => {
         <nav className="navbar navbar-expand-lg p-1 fixed-top custom-header">
             <div className="container">
                 <Link to="/" className="navbar-brand logo text-white">
-                    <img src={Logo} alt="logo" height="35px" width="160px" />
-                    {/* Snaap.io */}
+                    {/* <img src={Logo} alt="logo" height="35px" width="160px" /> */}
+                    Snaap.io
                 </Link>
                 <SimpleDrawer users={users} Signout={signOutUser} className="hamburger" />
             </div>
