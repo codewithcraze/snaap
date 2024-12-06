@@ -12,6 +12,10 @@ import { useNavigate } from "react-router-dom";
 import { sweetAlert } from "../../custom-hooks/useSweetAlert";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import ModeIcon from '@mui/icons-material/Mode';
+import AbcIcon from '@mui/icons-material/Abc';
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
+import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
+
 const SimpleDrawer = ({ users, Signout }) => {
   const [open, setOpen] = useState(false);
   console.log(users)  
@@ -28,8 +32,18 @@ const SimpleDrawer = ({ users, Signout }) => {
     },
     {
       route: 'View Blogs',
-      icon: <ModeIcon />,
+      icon: <AbcIcon />,
       path: '/dashboard/view-blogs',
+    },
+    {
+      route: 'Add User',
+      icon: <PersonAddAltIcon />,
+      path: '/dashboard/add-users',
+    },
+    {
+      route: "Add Document",
+      icon: <CreateNewFolderIcon />,
+      path: '/dashboard/add-document',
     }
   ]
 

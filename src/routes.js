@@ -18,6 +18,9 @@ const ResetPassword = lazy(() => import('./components/auth/reset-password'));
 const AddBlogs = lazy(() => import('./components/admin/blogs/add-blogs'));
 const ViewBlogs = lazy(() => import('./components/admin/blogs/view-blogs'));
 const EditBlogs = lazy(() => import('./components/admin/blogs/edit-blog'));
+const AddUser = lazy(() => import('./components/admin/doc/addUser'));
+const AddDocument = lazy(() => import('./components/admin/doc/addDoc'));
+
 
 const Router = () => {
     const user = useSelector((state) => state.users);
@@ -54,6 +57,8 @@ const Router = () => {
                                 <Route path="add-blogs" element={<AddBlogs />} />
                                 <Route path="view-blogs" element={<ViewBlogs />} />
                                 <Route path="view-blogs/:id" element={<EditBlogs />} />
+                                <Route path="add-users" element={<AddUser />} />
+                                <Route path="add-document" element={<AddDocument />} />
                             </Route>
                             <Route path="/forget-password" element={<ForgetPassword />} />
                         </Routes>
