@@ -112,6 +112,9 @@ const AddDocument = () => {
 
     // Handle document deletion
     const handleDelete = async (username, documentId) => {
+
+ 
+
         try {
             const response = await axios.post(DELETEDOC, {
                 username,
@@ -231,7 +234,7 @@ const AddDocument = () => {
                                                     Download
                                                 </a>
                                                 <button type="button" onClick={() => handleDelete(user.username, doc._id)}>
-                                                    Delete Document
+                                                    Remove
                                                 </button>
                                             </li>
                                         ))}
