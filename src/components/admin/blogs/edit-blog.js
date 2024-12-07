@@ -9,10 +9,12 @@ import { showToast, Loader } from '../../../utils/tool.js';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useParams } from "react-router-dom";
-import { UPDATEBLOG, GETBLOG} from '../../../credentials/index.js';
+import { UPDATEBLOG, GETBLOG } from '../../../credentials/index.js';
 
 
 export default function ViewSpecificBlog() {
+
+    // const [editorInstance, setEditorInstance] = React.useState(null);
     const { id } = useParams();
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
@@ -25,6 +27,7 @@ export default function ViewSpecificBlog() {
         tfnPopup: '',
         tfnFooter: '',
         postBy: '',
+        imageURL: null,
         extraTags: '',
         heading: '',
         status: Boolean,
@@ -33,9 +36,28 @@ export default function ViewSpecificBlog() {
         metaKeywords: '',
     });
     const [editorInstance, setEditorInstance] = useState(null);
-
+    const [imageFile, setImageFile] = useState(null);
 
     console.log(formData);
+
+    const uploadImage = async () => {
+
+        if (!imageFile) return '';
+
+        const formData = new FormData();
+        formData.append('image', imageFile);
+
+        try {
+            const response = await axios.post("https://openurl-seven.vercel.app/upload", formData);
+            if (response.data) {
+                return response.data.imageUrl;
+            }
+        } catch (error) {
+            console.error('Error uploading image:', error.response?.data);
+            showToast("ERROR", error.response?.data?.message || 'Image upload failed');
+        }
+        return '';
+    };
 
     useEffect(() => {
         const apiUrl = `${GETBLOG}/${id}`;
@@ -61,6 +83,7 @@ export default function ViewSpecificBlog() {
                         extraTags: data.blog.extraTags || '',
                         heading: data.blog.heading || '',
                         status: data.blog.status || '',
+                        imageURL: data.blog.imageURL,
                         id: data.blog._id || '',
                         metaDescription: data.blog.metaDescription || '',
                         metaKeywords: data.blog.metaKeywords || '',
@@ -79,19 +102,24 @@ export default function ViewSpecificBlog() {
     }, [editorInstance]);
 
     const handleChange = (event) => {
-        const { name, value  } = event.target;
-
-        setFormData(prevData => ({
-            ...prevData,
-            [name]: value
-        }));
-
+        const { name, value, type, files } = event.target;
+        if (type === 'file') {
+            setImageFile(files[0]);
+        } else {
+            setFormData(prevData => ({
+                ...prevData,
+                [name]: value
+            }));
+        }
     };
 
     const handleSubmit = async (event) => {
         setLoading(true);
         event.preventDefault();
         try {
+
+            const imageUrl = await uploadImage();
+
             const requestBody = {
                 title: formData.title || '',
                 titleUrl: formData.titleUrl || '',
@@ -101,6 +129,7 @@ export default function ViewSpecificBlog() {
                 tfnHeader: formData.tfnHeader || '',
                 tfnPopup: formData.tfnPopup || '',
                 tfnFooter: formData.tfnFooter || '',
+                imgUrl: imageUrl || formData.imageURL   ,
                 postBy: formData.postBy || '',
                 extraTags: formData.extraTags || '',
                 heading: formData.heading || '',
@@ -129,6 +158,24 @@ export default function ViewSpecificBlog() {
         }
     };
 
+
+    const handleImageUpload = (file) => {
+        return new Promise((resolve, reject) => {
+            const formDataToSend = new FormData();
+            formDataToSend.append('image', file);
+
+            axios.post(`https://openurl-seven.vercel.app/upload`, formDataToSend)
+                .then(response => {
+                    resolve({ default: response.data.imageUrl });
+                })
+                .catch(error => {
+                    console.error('Upload failed:', error);
+                    reject('Upload failed.');
+                });
+        });
+    };
+
+
     return (
         <div className='container mt-5'>
             <div>
@@ -145,7 +192,7 @@ export default function ViewSpecificBlog() {
                     onSubmit={handleSubmit}
                 >
                     <div className='mt-1'>
-                     
+
                         <div className='row mt-2'>
                             <div className='col-lg-12'>
                                 <div className="col-lg-12 mt-2">
@@ -187,9 +234,22 @@ export default function ViewSpecificBlog() {
                                         onChange={handleChange}
                                     />
                                 </div>
-                        
+
                             </div>
-                        
+
+                            <div className='row mt-2'>
+                                <div className='col-lg-6 mt-2'>
+                                    <TextField
+                                        id="image"
+                                        helperText="Select blog Image"
+                                        className="w-100"
+                                        type="file"
+                                        name="imageURL"
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                            </div>
+
                         </div>
                         <div className='row mt-2'>
                             <div className='col-lg-12'>
@@ -206,6 +266,26 @@ export default function ViewSpecificBlog() {
                                             shouldNotGroupWhenFull: true
                                         },
                                         language: 'en'
+                                    }}
+                                    onReady={editor => {
+                                        setEditorInstance(editor);
+
+                                        editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+                                            return {
+                                                upload: () => {
+                                                    return new Promise((resolve, reject) => {
+                                                        loader.file.then(file => {
+                                                            handleImageUpload(file)
+                                                                .then(response => resolve(response))
+                                                                .catch(error => reject(error));
+                                                        }).catch(error => reject(error));
+                                                    });
+                                                },
+                                                abort: () => {
+                                                    console.log('Image upload aborted');
+                                                }
+                                            };
+                                        };
                                     }}
                                     data={formData.content}
                                     onChange={(event, editor) => {

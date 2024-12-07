@@ -7,11 +7,13 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 const AddBlogs = () => {
+    const [editorInstance, setEditorInstance] = React.useState(null);
     const [formData, setFormData] = React.useState({
         title: '',
         titleUrl: '',
         content: '',
         description: '',
+        imageURL: null,
         categoryName: '',
         tfnHeader: '',
         tfnPopup: '',
@@ -35,11 +37,16 @@ const AddBlogs = () => {
         e.preventDefault();
         const formDataToSend = new FormData();
         formDataToSend.append('image', formData.imageURL);
+
+        const response = await axios.post("https://openurl-seven.vercel.app/upload", formDataToSend);
+        const imageURL = response.data.imageUrl;
+
         try {
             const blogData = {
                 title: formData.title,
                 titleUrl: formData.titleUrl,
                 content: formData.content,
+                imageURL: imageURL || "",
                 description: formData.description,
                 categoryName: formData.categoryName,
                 tfnHeader: formData.tfnHeader,
@@ -69,6 +76,9 @@ const AddBlogs = () => {
                     metaDescription: '',
                     metaKeywords: '',
                 });
+                if (editorInstance) {
+                    editorInstance.setData(''); // Clear CKEditor content
+                }
             }else{
                 showToast('ERROR', 'Failed to add blog.');
             }
@@ -76,6 +86,22 @@ const AddBlogs = () => {
             console.error('Error adding blog:', error);
             showToast('ERROR', 'Failed to add blog.');
         }
+    };
+
+    const handleImageUpload = (file) => {
+        return new Promise((resolve, reject) => {
+            const formDataToSend = new FormData();
+            formDataToSend.append('image', file);
+
+            axios.post(`https://openurl-seven.vercel.app/upload`, formDataToSend)
+            .then(response => {
+                resolve({ default: response.data.imageUrl });
+            })
+            .catch(error => {
+                console.error('Upload failed:', error);
+                reject('Upload failed.');
+            });
+        });
     };
 
     return (
@@ -92,6 +118,16 @@ const AddBlogs = () => {
                             type="text"
                             name="title"
                             value={formData.title}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className='col-lg-12 mt-2'>
+                        <TextField
+                            id="imageURL"
+                            className="w-100"
+                            required
+                            type="file"
+                            name="imageURL"
                             onChange={handleChange}
                         />
                     </div>
@@ -153,7 +189,7 @@ const AddBlogs = () => {
                                 toolbar: {
                                     items: [
                                         'heading', '|', 'bold', 'italic', '|',
-                                        'link', 'blockQuote', '|', 'bulletedList', 'numberedList', '|',
+                                        'link', 'blockQuote', 'imageUpload', '|', 'bulletedList', 'numberedList', '|',
                                         'mediaEmbed', '|', 'undo', 'redo', '|', 'indent', 'outdent', '|', 'fontFamily', 'fontSize', 'fontColor', 'fontBackgroundColor', 'highlight', '|',
                                         'specialCharacters', 'horizontalLine', 'pageBreak', '|',
                                         'insertTable', 'tableColumn', 'tableRow', 'mergeTableCells', '|',
@@ -163,6 +199,26 @@ const AddBlogs = () => {
                                     shouldNotGroupWhenFull: true
                                 },
                                 language: 'en'
+                            }}
+                            onReady={editor => {
+                                setEditorInstance(editor);
+
+                                editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+                                    return {
+                                        upload: () => {
+                                            return new Promise((resolve, reject) => {
+                                                loader.file.then(file => {
+                                                    handleImageUpload(file)
+                                                        .then(response => resolve(response))
+                                                        .catch(error => reject(error));
+                                                }).catch(error => reject(error));
+                                            });
+                                        },
+                                        abort: () => {
+                                            console.log('Image upload aborted');
+                                        }
+                                    };
+                                };
                             }}
                             data={formData.content}
                             onChange={(event, editor) => {
