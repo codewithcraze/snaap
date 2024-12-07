@@ -129,7 +129,7 @@ export default function ViewSpecificBlog() {
                 tfnHeader: formData.tfnHeader || '',
                 tfnPopup: formData.tfnPopup || '',
                 tfnFooter: formData.tfnFooter || '',
-                imgUrl: imageUrl || formData.imageURL   ,
+                imageURL: imageUrl || formData.imageURL   ,
                 postBy: formData.postBy || '',
                 extraTags: formData.extraTags || '',
                 heading: formData.heading || '',
